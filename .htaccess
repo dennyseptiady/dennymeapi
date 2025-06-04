@@ -1,0 +1,26 @@
+# .htaccess untuk Shared Hosting Node.js API
+# Redirect semua request ke aplikasi Node.js
+
+RewriteEngine On
+
+# Jika menggunakan subdirectory untuk API
+# RewriteBase /api
+
+# Proxy semua request ke Node.js application yang berjalan di port 3000
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ http://127.0.0.1:3000/$1 [P,L]
+
+# Set headers untuk proxy
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "GET,POST,PUT,DELETE,OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type,Authorization"
+
+# Handle preflight OPTIONS requests
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]
+
+# Security headers
+Header always set X-Content-Type-Options nosniff
+Header always set X-Frame-Options DENY
+Header always set X-XSS-Protection "1; mode=block"

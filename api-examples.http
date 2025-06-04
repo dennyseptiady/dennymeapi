@@ -1,0 +1,1190 @@
+### API CMS DennyMe - HTTP Requests Examples
+### Base URL: http://localhost:8000/api
+
+### Health Check
+GET http://localhost:8000/api/health
+
+###
+
+### 1. Register User
+POST http://localhost:8000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "Password123",
+  "role": "user"
+}
+
+###
+
+### 2. Login with Admin (default account)
+POST http://localhost:8000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin123"
+}
+
+###
+
+### 3. Login with User
+POST http://localhost:8000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "Password123"
+}
+
+###
+
+### 4. Get Profile (requires token)
+GET http://localhost:8000/api/auth/profile
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+###
+
+### 5. Update Profile (requires token)
+PUT http://localhost:8000/api/auth/profile
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "John Updated",
+  "email": "john.updated@example.com"
+}
+
+###
+
+### 6. Change Password (requires token)
+PUT http://localhost:8000/api/auth/change-password
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "currentPassword": "Password123",
+  "newPassword": "NewPassword123"
+}
+
+###
+
+### 7. Get All Users (Admin only)
+GET http://localhost:8000/api/users?page=1&limit=10
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+
+###
+
+### 8. Get User by ID (Admin only)
+GET http://localhost:8000/api/users/1
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+
+###
+
+### 9. Create User (Admin only)
+POST http://localhost:8000/api/users
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "password": "Password123",
+  "role": "user"
+}
+
+###
+
+### 10. Update User (Admin only)
+PUT http://localhost:8000/api/users/2
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "Jane Updated",
+  "email": "jane.updated@example.com",
+  "role": "admin"
+}
+
+###
+
+### 11. Toggle User Status (Admin only)
+PATCH http://localhost:8000/api/users/2/toggle-status
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+
+###
+
+### 12. Delete User (Admin only)
+DELETE http://localhost:8000/api/users/2
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+
+###
+
+### 13. Logout
+POST http://localhost:8000/api/auth/logout
+Authorization: Bearer YOUR_JWT_TOKEN_HERE
+
+###
+
+### ========================================
+### CATEGORY MANAGEMENT
+### ========================================
+
+### 14. Get All Categories (Public)
+GET http://localhost:8000/api/categories?page=1&limit=10
+
+###
+
+### 15. Get Category by ID (Public)
+GET http://localhost:8000/api/categories/1
+
+###
+
+### 16. Get Categories with Skills (Public)
+GET http://localhost:8000/api/categories/with-skills?page=1&limit=10
+
+###
+
+### ========================================
+### NEW FLEXIBLE CATEGORIES WITH SKILLS API
+### ========================================
+
+### 16a. Get All Categories with Skills (New Flexible Endpoint)
+# Description: Menampilkan semua kategori beserta skills yang terkait dengan setiap kategori
+# Response: Data skills dikelompokkan dalam array 'skills' untuk setiap kategori
+GET http://localhost:8000/api/categories/skills
+
+###
+
+### 16b. Get All Categories with Skills - With Pagination
+GET http://localhost:8000/api/categories/skills?page=1&limit=5
+
+###
+
+### 16c. Get Specific Category with Skills (Using URL Parameter)
+# Description: Menampilkan kategori tertentu beserta skills yang terkait
+GET http://localhost:8000/api/categories/skills/1
+
+###
+
+### 16d. Get Specific Category with Skills (Using Query Parameter)
+# Description: Alternative method menggunakan query parameter
+GET http://localhost:8000/api/categories/skills?categoryId=1
+
+###
+
+### 16e. Get Specific Category with Skills - With Pagination
+GET http://localhost:8000/api/categories/skills/1?page=1&limit=5
+
+###
+
+### 16f. Get Specific Category with Skills - Query Parameter + Pagination
+GET http://localhost:8000/api/categories/skills?categoryId=2&page=1&limit=3
+
+###
+
+### Expected Response Format for Categories with Skills:
+# {
+#   "status": "success",
+#   "data": {
+#     "categories": [
+#       {
+#         "id": 1,
+#         "name": "Frontend Development",
+#         "description": "Frontend technologies and frameworks",
+#         "is_active": 1,
+#         "created_by": 1,
+#         "updated_by": 1,
+#         "created_at": "2024-01-01T00:00:00.000Z",
+#         "updated_at": "2024-01-01T00:00:00.000Z",
+#         "skills": [
+#           {
+#             "id": 1,
+#             "name": "React.js",
+#             "description": "JavaScript library for building user interfaces",
+#             "icon": "react-icon.png",
+#             "is_active": 1
+#           },
+#           {
+#             "id": 2,
+#             "name": "Vue.js",
+#             "description": "Progressive JavaScript framework",
+#             "icon": "vue-icon.png",
+#             "is_active": 1
+#           }
+#         ]
+#       }
+#     ],
+#     "pagination": {
+#       "currentPage": 1,
+#       "totalPages": 1,
+#       "totalData": 2,
+#       "limit": 10
+#     }
+#   }
+# }
+
+###
+
+### 17. Create Category (Admin only)
+POST http://localhost:8000/api/categories
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "Frontend Development",
+  "description": "Technologies and frameworks for frontend development",
+  "is_active": true,
+  "created_by": 1,
+  "updated_by": 1
+}
+
+###
+
+### 18. Update Category (Admin only)
+PUT http://localhost:8000/api/categories/1
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "Frontend Development Updated",
+  "description": "Updated description for frontend development",
+  "is_active": true,
+  "updated_by": 1
+}
+
+###
+
+### 19. Toggle Category Status (Admin only)
+PATCH http://localhost:8000/api/categories/1/toggle-status
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+
+###
+
+### 20. Delete Category (Admin only)
+DELETE http://localhost:8000/api/categories/1
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+
+###
+
+### ========================================
+### SKILL MANAGEMENT
+### ========================================
+
+### 21. Get All Skills (Public)
+GET http://localhost:8000/api/skills?page=1&limit=10
+
+###
+
+### 22. Get Skill by ID (Public)
+GET http://localhost:8000/api/skills/1
+
+###
+
+### 23. Get Skills by Category (Public)
+GET http://localhost:8000/api/skills/category/1?page=1&limit=10
+
+###
+
+### 24. Create Skill (Admin only)
+POST http://localhost:8000/api/skills
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "category_id": 1,
+  "name": "React.js",
+  "description": "A JavaScript library for building user interfaces",
+  "icon": "react-icon.svg",
+  "is_active": true,
+  "created_by": 1,
+  "updated_by": 1
+}
+
+###
+
+### 25. Create Another Skill (Admin only)
+POST http://localhost:8000/api/skills
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "category_id": 1,
+  "name": "Vue.js",
+  "description": "The Progressive JavaScript Framework",
+  "icon": "vue-icon.svg",
+  "is_active": true,
+  "created_by": 1,
+  "updated_by": 1
+}
+
+###
+
+### 26. Update Skill (Admin only)
+PUT http://localhost:8000/api/skills/1
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "React.js Updated",
+  "description": "Updated description for React.js",
+  "icon": "react-new-icon.svg",
+  "is_active": true,
+  "updated_by": 1
+}
+
+###
+
+### 27. Move Skill to Different Category (Admin only)
+PUT http://localhost:8000/api/skills/1
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "category_id": 2,
+  "updated_by": 1
+}
+
+###
+
+### 28. Toggle Skill Status (Admin only)
+PATCH http://localhost:8000/api/skills/1/toggle-status
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+
+###
+
+### 29. Delete Skill (Admin only)
+DELETE http://localhost:8000/api/skills/1
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+
+###
+
+### ========================================
+### EXAMPLE WORKFLOW
+### ========================================
+
+### 30. Create Backend Category
+POST http://localhost:8000/api/categories
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "name": "Backend Development",
+  "description": "Server-side technologies and frameworks",
+  "is_active": true,
+  "created_by": 1,
+  "updated_by": 1
+}
+
+###
+
+### 31. Create Node.js Skill in Backend Category
+POST http://localhost:8000/api/skills
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "category_id": 2,
+  "name": "Node.js",
+  "description": "JavaScript runtime built on Chrome's V8 JavaScript engine",
+  "icon": "nodejs-icon.svg",
+  "is_active": true,
+  "created_by": 1,
+  "updated_by": 1
+}
+
+###
+
+### 32. Create Express.js Skill in Backend Category
+POST http://localhost:8000/api/skills
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "category_id": 2,
+  "name": "Express.js",
+  "description": "Fast, unopinionated, minimalist web framework for Node.js",
+  "icon": "express-icon.svg",
+  "is_active": true,
+  "created_by": 1,
+  "updated_by": 1
+}
+
+###
+
+### ========================================
+### CATEGORIES WITH SKILLS API - FEATURES
+### ========================================
+
+### Key Features of New Categories with Skills API:
+# 
+# 1. FLEKSIBILITAS:
+#    - Tanpa categoryId: Menampilkan semua kategori dengan skills
+#    - Dengan categoryId: Menampilkan kategori tertentu dengan skills
+#
+# 2. PAGINATION:
+#    - Mendukung pagination untuk performa yang lebih baik
+#    - Parameter: page (default: 1), limit (default: 10)
+#
+# 3. SOFT DELETE:
+#    - Hanya menampilkan data yang tidak dihapus (is_deleted = 0)
+#    - Berlaku untuk kategori dan skills
+#
+# 4. STRUCTURED RESPONSE:
+#    - Data skills dikelompokkan dalam array 'skills' untuk setiap kategori
+#    - Lebih mudah digunakan di frontend dibanding endpoint lama
+#
+# 5. ACTIVE STATUS:
+#    - Menampilkan status is_active untuk kategori dan skills
+#    - Membantu filter data aktif/tidak aktif
+#
+# PERBEDAAN DENGAN ENDPOINT LAMA:
+# - Endpoint lama (/with-skills): LEFT JOIN sederhana, data tidak terstruktur
+# - Endpoint baru (/skills): Data skills terkelompok per kategori, lebih clean
+#
+# USAGE EXAMPLES:
+# - Semua kategori: GET /api/categories/skills
+# - Kategori tertentu: GET /api/categories/skills/1
+# - Dengan pagination: GET /api/categories/skills?page=1&limit=5
+# - Filter + pagination: GET /api/categories/skills/1?page=1&limit=5
+
+###
+
+### ========================================
+### PROFILE MANAGEMENT
+### ========================================
+
+### 33. Get All Profiles (Public)
+GET http://localhost:8000/api/profiles?page=1&limit=10
+
+###
+
+### 34. Get Profile by ID (Public)
+GET http://localhost:8000/api/profiles/1
+
+###
+
+### 35. Get Profile by Email (Public)
+GET http://localhost:8000/api/profiles/email/john.doe@example.com
+
+###
+
+### 36. Create Profile (Admin only)
+POST http://localhost:8000/api/profiles
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "full_name": "John Doe",
+  "email": "john.doe@example.com",
+  "phone_number": "+1234567890",
+  "linkedin_profile": "https://linkedin.com/in/johndoe",
+  "github_profile": "https://github.com/johndoe",
+  "instagram_profile": "https://instagram.com/johndoe",
+  "tiktok_profile": "https://tiktok.com/@johndoe",
+  "x_profile": "https://x.com/johndoe",
+  "profile_picture_url": "https://example.com/profile.jpg",
+  "bio": "Full-stack developer with 5 years of experience in React, Node.js, and MySQL. Passionate about creating scalable web applications and learning new technologies.",
+  "years_of_experience": 5,
+  "current_job_title": "Senior Full Stack Developer",
+  "preferred_tech_stack": "React, Node.js, Express.js, MySQL, MongoDB, TypeScript, Docker",
+  "certifications": "AWS Certified Developer Associate, Google Cloud Professional Developer",
+  "resume_url": "https://example.com/resume.pdf"
+}
+
+###
+
+### 37. Create Another Profile (Admin only)
+POST http://localhost:8000/api/profiles
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "full_name": "Jane Smith",
+  "email": "jane.smith@example.com",
+  "phone_number": "+1987654321",
+  "linkedin_profile": "https://linkedin.com/in/janesmith",
+  "github_profile": "https://github.com/janesmith",
+  "bio": "Frontend specialist with expertise in React and Vue.js",
+  "years_of_experience": 3,
+  "current_job_title": "Frontend Developer",
+  "preferred_tech_stack": "React, Vue.js, TypeScript, Tailwind CSS",
+  "certifications": "Meta Frontend Developer Certificate"
+}
+
+###
+
+### 38. Update Profile (Admin only)
+PUT http://localhost:8000/api/profiles/1
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "full_name": "John Doe Updated",
+  "bio": "Senior full-stack developer with 6 years of experience. Updated bio with new achievements.",
+  "years_of_experience": 6,
+  "current_job_title": "Lead Full Stack Developer",
+  "preferred_tech_stack": "React, Node.js, Express.js, MySQL, MongoDB, TypeScript, Docker, Kubernetes",
+  "certifications": "AWS Certified Developer Associate, AWS Certified Solutions Architect, Google Cloud Professional Developer"
+}
+
+###
+
+### 39. Update Profile - Partial Update (Admin only)
+PUT http://localhost:8000/api/profiles/2
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: application/json
+
+{
+  "years_of_experience": 4,
+  "current_job_title": "Senior Frontend Developer"
+}
+
+###
+
+### 40. Delete Profile (Admin only)
+DELETE http://localhost:8000/api/profiles/1
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+
+###
+
+### ========================================
+### PROFILE IMAGE UPLOAD FUNCTIONALITY
+### ========================================
+
+### 41. Upload Profile Image Only (Admin only)
+POST http://localhost:8000/api/upload/profile-image
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="profile_image"; filename="profile.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/your/image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### 42. Create Profile with Image Upload (Admin only)
+POST http://localhost:8000/api/profiles/with-image
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="profile_image"; filename="john-profile.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/your/image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="full_name"
+
+John Doe with Image
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="email"
+
+john.image@example.com
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="phone_number"
+
++1234567890
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="linkedin_profile"
+
+https://linkedin.com/in/johndoe
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="github_profile"
+
+https://github.com/johndoe
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="bio"
+
+Full-stack developer with profile image upload functionality
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="years_of_experience"
+
+5
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="current_job_title"
+
+Senior Developer with Image
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="preferred_tech_stack"
+
+React, Node.js, Express.js, MySQL, Image Upload
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### 42b. Create Profile with Image Upload - Minimal Required Fields (Admin only)
+POST http://localhost:8000/api/profiles/with-image
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="profile_image"; filename="minimal-profile.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/your/image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="full_name"
+
+Jane Doe Minimal
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="email"
+
+jane.minimal@example.com
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### 43. Update Profile with Image Upload (Admin only)
+PUT http://localhost:8000/api/profiles/1/with-image
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="profile_image"; filename="updated-profile.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/your/updated-image.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="full_name"
+
+John Doe Updated with New Image
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="bio"
+
+Updated bio with new profile image
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="years_of_experience"
+
+6
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### 44. Update Profile without Image (keeps existing image)
+PUT http://localhost:8000/api/profiles/1/with-image
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="bio"
+
+Updated bio without changing profile image
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="current_job_title"
+
+Lead Developer
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### 45. Get Image Info (Public)
+GET http://localhost:8000/api/upload/profile-image/john-profile-1234567890-123456789.jpg
+
+###
+
+### 46. Delete Profile Image (Admin only)
+DELETE http://localhost:8000/api/upload/profile-image/john-profile-1234567890-123456789.jpg
+Authorization: Bearer YOUR_ADMIN_JWT_TOKEN_HERE
+
+###
+
+### ========================================
+### PROFILE API - EXAMPLE RESPONSES
+### ========================================
+
+### Expected Response for Get All Profiles:
+# {
+#   "status": "success",
+#   "data": {
+#     "profiles": [
+#       {
+#         "id": 1,
+#         "full_name": "John Doe",
+#         "email": "john.doe@example.com",
+#         "phone_number": "+1234567890",
+#         "linkedin_profile": "https://linkedin.com/in/johndoe",
+#         "github_profile": "https://github.com/johndoe",
+#         "instagram_profile": "https://instagram.com/johndoe",
+#         "tiktok_profile": "https://tiktok.com/@johndoe",
+#         "x_profile": "https://x.com/johndoe",
+#         "profile_picture_url": "https://example.com/profile.jpg",
+#         "bio": "Full-stack developer with 5 years of experience",
+#         "years_of_experience": 5,
+#         "current_job_title": "Senior Developer",
+#         "preferred_tech_stack": "React, Node.js, MySQL",
+#         "certifications": "AWS Certified Developer",
+#         "resume_url": "https://example.com/resume.pdf",
+#         "created_at": "2024-01-01T00:00:00.000Z",
+#         "updated_at": "2024-01-01T00:00:00.000Z"
+#       }
+#     ],
+#     "pagination": {
+#       "currentPage": 1,
+#       "totalPages": 1,
+#       "totalData": 1,
+#       "limit": 10
+#     }
+#   }
+# }
+
+### Expected Response for Create/Update Profile:
+# {
+#   "status": "success",
+#   "message": "Profile created successfully",
+#   "data": {
+#     "profile": {
+#       "id": 1,
+#       "full_name": "John Doe",
+#       "email": "john.doe@example.com",
+#       // ... all profile fields
+#     }
+#   }
+# }
+
+### Expected Error Responses:
+# 
+# 400 Bad Request (Validation Error):
+# {
+#   "status": "error",
+#   "message": "Validation failed",
+#   "errors": [
+#     {
+#       "field": "email",
+#       "message": "Please provide a valid email"
+#     }
+#   ]
+# }
+#
+# 404 Not Found:
+# {
+#   "status": "error",
+#   "message": "Profile not found"
+# }
+#
+# 409 Conflict (Email already exists):
+# {
+#   "status": "error",
+#   "message": "Profile with this email already exists"
+# }
+
+###
+
+### ========================================
+### PROFILE API - FEATURES & VALIDATION
+### ========================================
+
+### Key Features of Profile API:
+# 
+# 1. COMPREHENSIVE PROFILE DATA:
+#    - Personal info: full_name, email, phone_number
+#    - Social media: linkedin, github, instagram, tiktok, x_profile
+#    - Professional: bio, years_of_experience, current_job_title
+#    - Technical: preferred_tech_stack, certifications
+#    - Documents: profile_picture_url, resume_url
+#
+# 2. VALIDATION RULES:
+#    - full_name: Required, 2-255 characters
+#    - email: Required, valid email format, unique
+#    - phone_number: Optional, max 20 characters
+#    - Social profiles: Optional, max 255 characters each
+#    - years_of_experience: Optional, positive integer
+#    - current_job_title: Optional, max 100 characters
+#    - URLs: Optional, max 255 characters each
+#
+# 3. ACCESS CONTROL:
+#    - Public: GET operations (view profiles)
+#    - Admin only: POST, PUT, DELETE operations
+#    - JWT authentication required for protected routes
+#
+# 4. SEARCH CAPABILITIES:
+#    - Get by ID: /api/profiles/:id
+#    - Get by email: /api/profiles/email/:email
+#    - Pagination support for listing
+#
+# 5. DATABASE FEATURES:
+#    - Email uniqueness constraint
+#    - Automatic timestamps (created_at, updated_at)
+#    - Indexed fields for performance (email, full_name)
+#
+# USAGE SCENARIOS:
+# - Portfolio website: Display developer profiles
+# - Team directory: Company employee profiles
+# - Freelancer platform: Professional profiles
+# - Social network: User profile management
+
+###
+
+### ========================================
+### PROFILE IMAGE UPLOAD - FEATURES & USAGE
+### ========================================
+
+### Key Features of Profile Image Upload:
+# 
+# 1. SEPARATED FUNCTIONALITY:
+#    - Standalone image upload: /api/upload/profile-image
+#    - Profile creation with image: /api/profiles/with-image
+#    - Profile update with image: /api/profiles/:id/with-image
+#    - Original profile endpoints still work without images
+#
+# 2. IMAGE VALIDATION:
+#    - Allowed formats: JPEG, PNG, GIF, WebP
+#    - Maximum file size: 5MB
+#    - Only one file per upload
+#    - Automatic file type validation
+#
+# 3. FILE MANAGEMENT:
+#    - Unique filename generation (timestamp + random)
+#    - Automatic directory creation (/uploads/profile-images/)
+#    - Old image deletion when updating profile
+#    - Error cleanup (deletes uploaded file if operation fails)
+#
+# 4. URL GENERATION:
+#    - Automatic URL generation for uploaded images
+#    - Static file serving at /uploads/profile-images/
+#    - Full URL returned in API responses
+#
+# 5. SECURITY:
+#    - Admin-only upload permissions
+#    - File type validation
+#    - Size limits to prevent abuse
+#    - Secure filename generation
+#
+# 6. ERROR HANDLING:
+#    - Comprehensive error messages
+#    - Automatic cleanup on failures
+#    - Validation error responses
+#    - File not found handling
+#
+# ENDPOINTS OVERVIEW:
+# 
+# IMAGE UPLOAD ONLY:
+# - POST /api/upload/profile-image (upload image, get URL)
+# - GET /api/upload/profile-image/:filename (get image info)
+# - DELETE /api/upload/profile-image/:filename (delete image)
+#
+# PROFILE WITH IMAGE:
+# - POST /api/profiles/with-image (create profile + upload image)
+# - PUT /api/profiles/:id/with-image (update profile + upload image)
+#
+# ORIGINAL PROFILE ENDPOINTS (still work):
+# - POST /api/profiles (create profile with URL only)
+# - PUT /api/profiles/:id (update profile with URL only)
+#
+# WORKFLOW EXAMPLES:
+# 
+# Option 1 - Upload then Create:
+# 1. POST /api/upload/profile-image (get image URL)
+# 2. POST /api/profiles (create profile with returned URL)
+#
+# Option 2 - Create with Image:
+# 1. POST /api/profiles/with-image (upload image + create profile in one step)
+#
+# Option 3 - Update with New Image:
+# 1. PUT /api/profiles/:id/with-image (upload new image + update profile)
+#    - Automatically deletes old image
+#    - Updates profile_picture_url
+#
+# RESPONSE FORMAT:
+# {
+#   "status": "success",
+#   "message": "Profile created successfully",
+#   "data": {
+#     "profile": { /* profile data with image URL */ },
+#     "uploadedImage": {
+#       "filename": "john-profile-1234567890-123456789.jpg",
+#       "originalName": "profile.jpg",
+#       "size": 245760,
+#       "url": "http://localhost:8000/uploads/profile-images/john-profile-1234567890-123456789.jpg"
+#     },
+#     "oldImageDeleted": true // only for updates
+#   }
+# }
+
+###
+
+### ========================================
+### PROFILE EDUCATION API EXAMPLES
+### ========================================
+
+### Authentication Token (Replace with actual token)
+@authToken = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+### Get All Profile Educations
+GET http://localhost:8000/api/profile-educations
+Content-Type: application/json
+
+### Get All Profile Educations with Pagination and Search
+GET http://localhost:8000/api/profile-educations?page=1&limit=5&search=Computer Science
+Content-Type: application/json
+
+### Get Profile Education by ID
+GET http://localhost:8000/api/profile-educations/1
+Content-Type: application/json
+
+### Get Profile Educations by Profile ID
+GET http://localhost:8000/api/profile-educations/profile/1
+Content-Type: application/json
+
+### Get Profile Educations by Profile ID with Pagination
+GET http://localhost:8000/api/profile-educations/profile/1?page=1&limit=10
+Content-Type: application/json
+
+### Get Profile Educations with Details and Filters
+GET http://localhost:8000/api/profile-educations/details?profile_id=1&degree=Bachelor&min_gpa=3.0
+Content-Type: application/json
+
+### Get Profile Educations with Advanced Filters
+GET http://localhost:8000/api/profile-educations/details?graduation_year=2020&major=Computer Science&location=Jakarta
+Content-Type: application/json
+
+### Create Profile Education (Admin Only)
+POST http://localhost:8000/api/profile-educations
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "profile_id": 1,
+  "degree": "Bachelor of Science",
+  "major": "Computer Science",
+  "institution_name": "University of Technology",
+  "location": "Jakarta, Indonesia",
+  "graduation_year": 2020,
+  "start_year": 2016,
+  "gpa": 3.75,
+  "description": "Focused on software engineering and data structures with specialization in web development."
+}
+
+### Create Profile Education - Minimal Required Fields (Admin Only)
+POST http://localhost:8000/api/profile-educations
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "profile_id": 1,
+  "degree": "Master of Science",
+  "major": "Software Engineering",
+  "institution_name": "Institute of Technology"
+}
+
+### Update Profile Education (Admin Only)
+PUT http://localhost:8000/api/profile-educations/1
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "degree": "Master of Science",
+  "major": "Software Engineering", 
+  "graduation_year": 2022,
+  "gpa": 3.85,
+  "description": "Advanced studies in software architecture and system design."
+}
+
+### Update Profile Education - Partial Update (Admin Only)
+PUT http://localhost:8000/api/profile-educations/1
+Content-Type: application/json
+Authorization: {{authToken}}
+
+{
+  "gpa": 3.90,
+  "description": "Updated GPA and description"
+}
+
+### Delete Profile Education (Admin Only)
+DELETE http://localhost:8000/api/profile-educations/1
+Authorization: {{authToken}}
+
+### ========================================
+### PROFILE EDUCATION API - EXPECTED RESPONSES
+### ========================================
+
+### Expected Response for Get All Profile Educations:
+# {
+#   "status": "success",
+#   "data": {
+#     "profile_educations": [
+#       {
+#         "id": 1,
+#         "profile_id": 1,
+#         "degree": "Bachelor of Science",
+#         "major": "Computer Science",
+#         "institution_name": "University of Technology",
+#         "location": "Jakarta, Indonesia",
+#         "graduation_year": 2020,
+#         "start_year": 2016,
+#         "gpa": 3.75,
+#         "description": "Focused on software engineering and data structures.",
+#         "created_at": "2024-01-01T10:00:00.000Z",
+#         "updated_at": "2024-01-01T10:00:00.000Z",
+#         "profile_name": "John Doe"
+#       }
+#     ],
+#     "pagination": {
+#       "currentPage": 1,
+#       "totalPages": 1,
+#       "totalData": 1,
+#       "limit": 10
+#     }
+#   }
+# }
+
+### Expected Response for Create/Update Profile Education:
+# {
+#   "status": "success",
+#   "message": "Profile education created successfully",
+#   "data": {
+#     "profile_education": {
+#       "id": 1,
+#       "profile_id": 1,
+#       "degree": "Bachelor of Science",
+#       "major": "Computer Science",
+#       "institution_name": "University of Technology",
+#       "location": "Jakarta, Indonesia",
+#       "graduation_year": 2020,
+#       "start_year": 2016,
+#       "gpa": 3.75,
+#       "description": "Focused on software engineering and data structures.",
+#       "created_at": "2024-01-01T10:00:00.000Z",
+#       "updated_at": "2024-01-01T10:00:00.000Z"
+#     }
+#   }
+# }
+
+### Expected Error Responses:
+# 
+# 400 Bad Request (Missing Required Fields):
+# {
+#   "status": "error",
+#   "message": "Missing required fields: profile_id, degree, major, and institution_name are required"
+# }
+#
+# 400 Bad Request (Validation Error):
+# {
+#   "status": "error",
+#   "message": "Validation failed",
+#   "errors": [
+#     {
+#       "field": "gpa",
+#       "message": "gpa must be a decimal between 0 and 4.0"
+#     }
+#   ]
+# }
+#
+# 400 Bad Request (Year Validation):
+# {
+#   "status": "error",
+#   "message": "Start year cannot be after graduation year"
+# }
+#
+# 404 Not Found (Profile):
+# {
+#   "status": "error",
+#   "message": "Profile not found"
+# }
+#
+# 404 Not Found (Education):
+# {
+#   "status": "error",
+#   "message": "Profile education not found"
+# }
+#
+# 409 Conflict (Duplicate Education):
+# {
+#   "status": "error",
+#   "message": "Education with same degree and institution already exists for this profile"
+# }
+
+###
+
+### ========================================
+### PROFILE EDUCATION API - FEATURES & VALIDATION
+### ========================================
+
+### Key Features of Profile Education API:
+# 
+# 1. COMPREHENSIVE EDUCATION DATA:
+#    - Basic info: degree, major, institution_name
+#    - Location: Optional institution location
+#    - Timeline: start_year, graduation_year
+#    - Performance: GPA (0.0-4.0 scale)
+#    - Additional: description for extra details
+#
+# 2. VALIDATION RULES:
+#    - profile_id: Required, must be valid profile ID
+#    - degree: Required, 1-255 characters (e.g., "Bachelor of Science")
+#    - major: Required, 1-255 characters (e.g., "Computer Science")  
+#    - institution_name: Required, 1-255 characters
+#    - location: Optional, max 255 characters
+#    - graduation_year: Optional, 1900-2100 range
+#    - start_year: Optional, 1900-2100 range, must be <= graduation_year
+#    - gpa: Optional, decimal 0.0-4.0
+#    - description: Optional, unlimited text
+#
+# 3. BUSINESS LOGIC:
+#    - Unique constraint: Same degree + institution per profile
+#    - Year validation: start_year <= graduation_year
+#    - GPA validation: 0.0-4.0 scale (US standard)
+#    - Profile existence check before operations
+#
+# 4. ACCESS CONTROL:
+#    - Public: GET operations (view educations)
+#    - Admin only: POST, PUT, DELETE operations
+#    - JWT authentication required for protected routes
+#
+# 5. SEARCH & FILTERING:
+#    - Text search: profile name, degree, major, institution, location
+#    - Filter by: profile_id, degree, major, institution, location
+#    - Year filters: graduation_year, start_year
+#    - GPA range: min_gpa, max_gpa
+#    - Pagination support for all list endpoints
+#
+# 6. DATABASE FEATURES:
+#    - Join with profile table for name/email
+#    - Ordered by graduation_year DESC (newest first)
+#    - Hard delete (no soft delete like experiences)
+#    - Automatic timestamps (created_at, updated_at)
+#
+# USAGE SCENARIOS:
+# - Academic portfolio: Display educational background
+# - HR systems: Employee education verification
+# - University alumni: Track graduates
+# - Job platforms: Educational requirements matching
+# - Professional networks: Academic credentials display
+
+### ENDPOINT SUMMARY:
+# 
+# PUBLIC ENDPOINTS:
+# - GET /api/profile-educations (list all with pagination/search)
+# - GET /api/profile-educations/:id (get by ID)
+# - GET /api/profile-educations/profile/:profileId (get by profile)
+# - GET /api/profile-educations/details (advanced filtering)
+#
+# ADMIN ENDPOINTS:
+# - POST /api/profile-educations (create new)
+# - PUT /api/profile-educations/:id (update existing)
+# - DELETE /api/profile-educations/:id (delete)
+#
+# WORKFLOW EXAMPLES:
+# 
+# 1. List student educations:
+#    GET /api/profile-educations/profile/123
+#
+# 2. Find CS graduates in 2020:
+#    GET /api/profile-educations/details?major=Computer Science&graduation_year=2020
+#
+# 3. Find high GPA students:
+#    GET /api/profile-educations/details?min_gpa=3.5
+#
+# 4. Search by university:
+#    GET /api/profile-educations?search=University of Technology
+#
+# 5. Add new education:
+#    POST /api/profile-educations
+#    { profile_id: 1, degree: "PhD", major: "AI", institution_name: "MIT" }
+
+### 
