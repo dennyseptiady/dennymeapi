@@ -71,22 +71,34 @@ class User {
 
   // Get all users (without password - for general use)
   static async findAll(limit = 10, offset = 0) {
+    // For MySQL 9.x compatibility, use simple LIMIT and handle pagination differently
+    // Get more records than needed and slice in application
+    const actualLimit = limit + offset;
+    
     const [rows] = await pool.execute(
-      'SELECT id, name, email, role, is_active, created_at, updated_at FROM users ORDER BY created_at DESC LIMIT ? OFFSET ?',
-      [limit, offset]
+      'SELECT id, name, email, role, is_active, created_at, updated_at FROM users ORDER BY created_at DESC LIMIT ?',
+      [actualLimit]
     );
     
-    return rows.map(row => new User(row));
+    // Slice the results to get the correct page
+    const pagedResults = rows.slice(offset, offset + limit);
+    return pagedResults.map(row => new User(row));
   }
 
   // Get all users with password (for admin operations that might need password)
   static async findAllWithPassword(limit = 10, offset = 0) {
+    // For MySQL 9.x compatibility, use simple LIMIT and handle pagination differently
+    // Get more records than needed and slice in application
+    const actualLimit = limit + offset;
+    
     const [rows] = await pool.execute(
-      'SELECT * FROM users ORDER BY created_at DESC LIMIT ? OFFSET ?',
-      [limit, offset]
+      'SELECT * FROM users ORDER BY created_at DESC LIMIT ?',
+      [actualLimit]
     );
     
-    return rows.map(row => new User(row));
+    // Slice the results to get the correct page
+    const pagedResults = rows.slice(offset, offset + limit);
+    return pagedResults.map(row => new User(row));
   }
 
   // Update user
