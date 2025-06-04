@@ -72,8 +72,8 @@ class User {
   // Get all users (without password - for general use)
   static async findAll(limit = 10, offset = 0) {
     const [rows] = await pool.execute(
-      'SELECT id, name, email, role, is_active, created_at, updated_at FROM users ORDER BY created_at DESC LIMIT ?, ?',
-      [offset, limit]
+      'SELECT id, name, email, role, is_active, created_at, updated_at FROM users ORDER BY created_at DESC LIMIT ? OFFSET ?',
+      [limit, offset]
     );
     
     return rows.map(row => new User(row));
@@ -82,8 +82,8 @@ class User {
   // Get all users with password (for admin operations that might need password)
   static async findAllWithPassword(limit = 10, offset = 0) {
     const [rows] = await pool.execute(
-      'SELECT * FROM users ORDER BY created_at DESC LIMIT ?, ?',
-      [offset, limit]
+      'SELECT * FROM users ORDER BY created_at DESC LIMIT ? OFFSET ?',
+      [limit, offset]
     );
     
     return rows.map(row => new User(row));
