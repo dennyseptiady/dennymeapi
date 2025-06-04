@@ -71,33 +71,35 @@ class User {
 
   // Get all users (without password - for general use)
   static async findAll(limit = 10, offset = 0) {
-    // For MySQL 9.x compatibility, use simple LIMIT and handle pagination differently
-    // Get more records than needed and slice in application
-    const actualLimit = limit + offset;
+    // For MySQL 9.x compatibility, avoid parameter binding for LIMIT
+    // Ensure parameters are safe integers to prevent SQL injection
+    const safeLimit = Math.max(1, Math.min(1000, parseInt(limit) || 10));
+    const safeOffset = Math.max(0, parseInt(offset) || 0);
+    const actualLimit = safeLimit + safeOffset;
     
     const [rows] = await pool.execute(
-      'SELECT id, name, email, role, is_active, created_at, updated_at FROM users ORDER BY created_at DESC LIMIT ?',
-      [actualLimit]
+      `SELECT id, name, email, role, is_active, created_at, updated_at FROM users ORDER BY created_at DESC LIMIT ${actualLimit}`
     );
     
     // Slice the results to get the correct page
-    const pagedResults = rows.slice(offset, offset + limit);
+    const pagedResults = rows.slice(safeOffset, safeOffset + safeLimit);
     return pagedResults.map(row => new User(row));
   }
 
   // Get all users with password (for admin operations that might need password)
   static async findAllWithPassword(limit = 10, offset = 0) {
-    // For MySQL 9.x compatibility, use simple LIMIT and handle pagination differently
-    // Get more records than needed and slice in application
-    const actualLimit = limit + offset;
+    // For MySQL 9.x compatibility, avoid parameter binding for LIMIT
+    // Ensure parameters are safe integers to prevent SQL injection
+    const safeLimit = Math.max(1, Math.min(1000, parseInt(limit) || 10));
+    const safeOffset = Math.max(0, parseInt(offset) || 0);
+    const actualLimit = safeLimit + safeOffset;
     
     const [rows] = await pool.execute(
-      'SELECT * FROM users ORDER BY created_at DESC LIMIT ?',
-      [actualLimit]
+      `SELECT * FROM users ORDER BY created_at DESC LIMIT ${actualLimit}`
     );
     
     // Slice the results to get the correct page
-    const pagedResults = rows.slice(offset, offset + limit);
+    const pagedResults = rows.slice(safeOffset, safeOffset + safeLimit);
     return pagedResults.map(row => new User(row));
   }
 
