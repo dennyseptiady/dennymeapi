@@ -8,8 +8,10 @@ const getAllCategories = async (req, res, next) => {
     const offset = (page - 1) * limit;
     const search = req.query.search || '';
 
-    const categories = await Category.findAll(limit, offset, search);
-    const totalData = await Category.getCount(search);
+    // Fix: Pass search as filters object instead of string
+    const filters = search ? { search } : {};
+    const categories = await Category.findAll(limit, offset, filters);
+    const totalData = await Category.getCount(filters);
     const totalPages = Math.ceil(totalData / limit);
 
     res.status(200).json({
