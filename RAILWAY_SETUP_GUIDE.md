@@ -95,11 +95,11 @@ NODE_ENV=production
 PORT=8000
 
 # Database - gunakan kredensial dari MySQL service Railway
-DB_HOST=[mysql_host_dari_railway]
+DB_HOST=mysql.railway.internal
 DB_USER=root
-DB_PASSWORD=[mysql_password_dari_railway]
+DB_PASSWORD=JGuGJCtLROAPHWJZyrxrFqkuwdgWpLtZ
 DB_NAME=railway
-DB_PORT=[mysql_port_dari_railway]
+DB_PORT=3306
 
 # JWT Configuration
 JWT_SECRET=your_super_secure_production_jwt_key_make_it_very_long_and_complex_123456789

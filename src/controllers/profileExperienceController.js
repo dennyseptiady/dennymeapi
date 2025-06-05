@@ -9,8 +9,10 @@ const getAllProfileExperiences = async (req, res, next) => {
     const offset = (page - 1) * limit;
     const search = req.query.search || '';
 
-    const profileExperiences = await ProfileExperience.findAll(limit, offset, search);
-    const totalData = await ProfileExperience.getCount(search);
+    // Fix: Pass search as filters object instead of string
+    const filters = search ? { search } : {};
+    const profileExperiences = await ProfileExperience.findAll(limit, offset, filters);
+    const totalData = await ProfileExperience.getCount(filters);
     const totalPages = Math.ceil(totalData / limit);
 
     res.status(200).json({

@@ -11,8 +11,10 @@ const getAllProfileSkills = async (req, res, next) => {
     const offset = (page - 1) * limit;
     const search = req.query.search || '';
 
-    const profileSkills = await ProfileSkill.findAll(limit, offset, search);
-    const totalData = await ProfileSkill.getCount(search);
+    // Fix: Pass search as filters object instead of string
+    const filters = search ? { search } : {};
+    const profileSkills = await ProfileSkill.findAll(limit, offset, filters);
+    const totalData = await ProfileSkill.getCount(filters);
     const totalPages = Math.ceil(totalData / limit);
 
     res.status(200).json({

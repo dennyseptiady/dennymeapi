@@ -9,8 +9,10 @@ const getAllSkills = async (req, res, next) => {
     const offset = (page - 1) * limit;
     const search = req.query.search || '';
 
-    const skills = await Skill.findAll(limit, offset, search);
-    const totalData = await Skill.getCount(search);
+    // Fix: Pass search as filters object instead of string
+    const filters = search ? { search } : {};
+    const skills = await Skill.findAll(limit, offset, filters);
+    const totalData = await Skill.getCount(filters);
     const totalPages = Math.ceil(totalData / limit);
 
     res.status(200).json({
